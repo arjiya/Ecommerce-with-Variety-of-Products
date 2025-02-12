@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import "./CategoryPage.css"; // Create this CSS file for styling
+import "./CategoryPage.css"; 
 
 const CategoryPage = () => {
-  const { category } = useParams(); // Get the category from URL
+  const { category } = useParams(); 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 

@@ -1,0 +1,90 @@
+.signin-container {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    margin-top:100px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.remember-forgot label {
+    font-size: 14px;
+}
+
+.forgot-link {
+    text-decoration: none;
+    color: #3498db;
+    font-size: 14px;
+}
+
+.forgot-link:hover {
+    text-decoration: underline;
+}
+
+.signin-button {
+    width: 100%;
+    padding: 10px;
+    background: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.signin-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.register-text {
+    margin-top: 10px;
+}
+
+.register-text a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-text a:hover {
+    text-decoration: underline;
+}

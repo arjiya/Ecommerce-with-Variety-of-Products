@@ -4,10 +4,9 @@ import { useParams, Link } from 'react-router-dom';
 import './APICall.css';
 
 function ProductDetail() {
-    const { id } = useParams();  // Retrieve the product ID from the URL
+    const { id } = useParams();  
     const [product, setProduct] = useState(null);
 
-    // Log the product ID
     console.log('Product ID:', id);
 
     useEffect(() => {
@@ -20,10 +19,9 @@ function ProductDetail() {
             .catch((err) => console.error("Error fetching product details:", err));
     }, [id]);
 
-    // If the product is not found yet, show a loading message
     if (!product) return <div>Loading...</div>;
 
-    // If product data is not available, show an error message
+  
     if (!product.title) return <div>Product not found</div>;
 
     return (
