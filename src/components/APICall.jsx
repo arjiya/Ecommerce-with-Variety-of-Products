@@ -16,7 +16,7 @@ function APICall() {
     return (
         <div className='api'>
             <div className="api-container">
-                <h1>Our Products</h1>
+                
                 <div className="product-grid">
                     {product.map((item) => (
                         <div className="product-card" key={item.id}>
@@ -29,6 +29,7 @@ function APICall() {
                             <div className="product-stats">
                                 <span className="price">Price: ${item.price}</span>
                                 <span className="category">Category: {item.category}</span>
+                              
                             </div>
                         </div>
                     ))}

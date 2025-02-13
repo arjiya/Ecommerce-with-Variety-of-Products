@@ -6,6 +6,8 @@
 h2 {
     color: #2c3e50;
     margin-bottom: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
 }
 
 .product-grid {
@@ -40,9 +42,11 @@ h2 {
     text-decoration: none;
     background: #f39c12;
     color: white;
-    padding: 8px 12px;
+    padding: 8px 8px;
     border-radius: 5px;
     transition: 0.3s;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: medium;
 }
 
 .view-details:hover {

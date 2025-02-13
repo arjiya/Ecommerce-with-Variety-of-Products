@@ -1,50 +1,111 @@
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
-import { Link } from "react-router-dom"; 
-import './Footer.css'
+
+// import React from "react";
+// import { Link } from "react-router-dom";
+// import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
+// import "./Footer.css";
+
+// const Footer = () => {
+//   return (
+//     <footer className="footer">
+//       <div className="footer-top">
+//         <p>Back to top</p>
+//       </div>
+
+//       <div className="footer-links">
+//         <div className="footer-column">
+//           <h4>Get to Know Us</h4>
+//           <Link to="/about">About Us</Link>
+//           <Link to="/careers">Careers</Link>
+//           <Link to="/press">Press Releases</Link>
+//           <Link to="/contact">Contact Us</Link>
+//         </div>
+
+//         <div className="footer-column">
+//           <h4>Help</h4>
+//           <Link to="/faq">FAQs</Link>
+//           <Link to="/returns">Returns</Link>
+//           <Link to="/shipping">Shipping Info</Link>
+//           <Link to="/customer-service">Customer Service</Link>
+//         </div>
+
+//         <div className="footer-column">
+//           <h4>Follow Us</h4>
+//           <div className="social-icons">
+//             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
+//             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><FaTwitter /></a>
+//             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+//             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><FaLinkedin /></a>
+//           </div>
+//         </div>
+//       </div>
+
+//       <div className="footer-bottom">
+//         <p>&copy; {new Date().getFullYear()} ShopNest. All Rights Reserved.</p>
+//       </div>
+//     </footer>
+//   );
+// };
+
+// export default Footer;
 import React from "react";
+import { Link } from "react-router-dom";
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
+import "./Footer.css";
 
 const Footer = () => {
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
-    <footer className="bg-gray-800 text-white py-8">
-      <div className="max-w-screen-xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center md:text-left">
-            <h4 className="text-xl font-bold mb-4">ShopNest</h4>
-            <p>Your one-stop shop for all your needs.</p>
-          </div>
+    <footer className="footer">
+      <div className="footer-top">
+        <button onClick={scrollToTop} className="back-to-top-btn">
+          Back to top
+        </button>
+      </div>
 
-          <div className="text-center md:text-left">
-            <h4 className="text-xl font-bold mb-4">Quick Links</h4>
-            <ul>
-              <li><Link to="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
-              <li><Link to="/privacy" className="text-gray-400 hover:text-white">Privacy Policy</Link></li>
-              <li><Link to="/terms" className="text-gray-400 hover:text-white">Terms of Service</Link></li>
-              <li><Link to="/contact" className="text-gray-400 hover:text-white">Contact Us</Link></li>
-            </ul>
-          </div>
+      <div className="footer-links">
+        <div className="footer-column">
+          <h4>Get to Know Us</h4>
+          <Link to="/about">About Us</Link>
+          <Link to="/careers">Careers</Link>
+          <Link to="/press">Press Releases</Link>
+          <Link to="/contact">Contact Us</Link>
+        </div>
 
-          <div className="text-center md:text-left">
-            <h4 className="text-xl font-bold mb-4">Follow Us</h4>
-            <div className="flex justify-center md:justify-start space-x-6">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white">
-                <FaFacebookF />
-              </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white">
-                <FaTwitter />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white">
-                <FaInstagram />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white">
-                <FaLinkedinIn />
-              </a>
-            </div>
+        <div className="footer-column">
+          <h4>Help</h4>
+          <Link to="/faq">FAQs</Link>
+          <Link to="/returns">Returns</Link>
+          <Link to="/shipping">Shipping Info</Link>
+          <Link to="/customer-service">Customer Service</Link>
+        </div>
+
+        <div className="footer-column">
+          <h4>Follow Us</h4>
+          <div className="social-icons">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+              <FaFacebook />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+              <FaTwitter />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+              <FaInstagram />
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+              <FaLinkedin />
+            </a>
           </div>
         </div>
       </div>
 
-      <div className="bg-gray-900 py-4">
-        <p className="text-center text-sm text-gray-400">© 2025 ShopNest. All rights reserved.</p>
+      <div className="footer-bottom">
+        <p>&copy; {new Date().getFullYear()} ShopNest. All Rights Reserved.</p>
       </div>
     </footer>
   );

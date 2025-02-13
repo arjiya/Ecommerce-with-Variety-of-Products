@@ -19,18 +19,7 @@ const Header = () => {
       <div className="logo">
         <Link to="/">ShopNest</Link>
       </div>
-
-      <ul className="nav-links">
-        <li className="search-box">
-          <input type="text" id="search" placeholder="Search ShopNest" />
-          <FaSearch className="search-icon" />
-        </li>
-
-        <li>
-          <Link to="/products">Products</Link>
-        </li>
-
-        <li className="dropdown">
+      <li className="dropdown">
           <button className="dropbtn">All Categories</button>
           <div className="dropdown-content">
             {categories.length > 0 ? (
@@ -44,6 +33,14 @@ const Header = () => {
             )}
           </div>
         </li>
+
+      <ul className="nav-links">
+        <li className="search-box">
+          <input type="text" id="search" placeholder="Search ShopNest" />
+          <FaSearch className="search-icon" />
+        </li>
+
+       
 
         <li>
           <Link to="/cart">

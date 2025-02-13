@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./SignUp.css";
+import "./Register.css";
 
-const SignUp = () => {
+const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,7 +11,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSignUp = (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
 
     // Validation checks
@@ -31,19 +31,20 @@ const SignUp = () => {
     setLoading(true);
     setError("");
 
+    // Simulating API call (Replace with backend API later)
     setTimeout(() => {
       setLoading(false);
-      alert("Sign Up Successful!");
-      navigate("/SignIn"); 
+      alert("Registration Successful!");
+      navigate("/SignIn"); // Redirect to Sign In page after registration
     }, 2000);
   };
 
   return (
-    <div className="signup-container">
-      <h2>Create an Account</h2>
+    <div className="register-container">
+      <h2>Register Account</h2>
       {error && <p className="error-message">{error}</p>}
       
-      <form onSubmit={handleSignUp}>
+      <form onSubmit={handleRegister}>
         <div className="input-group">
           <label>Full Name</label>
           <input
@@ -88,8 +89,8 @@ const SignUp = () => {
           />
         </div>
 
-        <button type="submit" className="signup-button" disabled={loading}>
-          {loading ? "Signing Up..." : "Sign Up"}
+        <button type="submit" className="register-button" disabled={loading}>
+          {loading ? "Registering..." : "Register"}
         </button>
 
         <p className="signin-text">
@@ -100,4 +101,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Register;
