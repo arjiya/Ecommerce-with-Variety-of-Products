@@ -43,7 +43,7 @@ const Header = () => {
        
 
         <li>
-          <Link to="/cart">
+          <Link to="/CartPage">
             <FaShoppingCart /> Cart
           </Link>
         </li>

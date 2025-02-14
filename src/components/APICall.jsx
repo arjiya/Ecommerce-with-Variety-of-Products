@@ -20,7 +20,7 @@ function APICall() {
                 <div className="product-grid">
                     {product.map((item) => (
                         <div className="product-card" key={item.id}>
-                            <Link to={`/product/${item.id}`}>  {/* Link to product detail page */}
+                            <Link to={`/product/${item.id}`}>  
                                 <img className="product-image" src={item.image} alt={item.title} />
                             </Link>
                             <div className="product-info">
