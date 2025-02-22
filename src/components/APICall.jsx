@@ -11,6 +11,7 @@ function APICall() {
             .then(res => res.json())
             .then(prod => setProduct(prod))
             .catch(err => console.log("Error fetching data:", err));
+           
     }, []);
 
     return (

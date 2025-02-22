@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './CartPage.css';
@@ -18,7 +19,7 @@ function CartPage() {
     };
 
     const getTotalPrice = () => {
-        return cart.reduce((total, item) => total + item.price, 0).toFixed(2);
+        return cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
     };
 
     return (
@@ -37,14 +38,16 @@ function CartPage() {
                                 <div className="cart-item-details">
                                     <p><strong>{item.title}</strong></p>
                                     <p><strong>Price:</strong> ${item.price}</p>
+                                    <p><strong>Quantity:</strong> {item.quantity}</p>
+                                    <p><strong>Total:</strong> ${item.price * item.quantity}</p>
                                 </div>
-                                <button className="remove-item" onClick={() => handleRemoveItem(index)}>❌</button>
+                                <button className="remove-item" onClick={() => handleRemoveItem(index)}>Remove</button>
                             </li>
                         ))}
                     </ul>
 
                     <h3>Total: ${getTotalPrice()}</h3>
-                    <Link to="/checkout" className="checkout-button">Proceed to Checkout</Link>
+                    <Link to="/CheckoutPage" className="checkout-button">Proceed to Checkout</Link>
                 </>
             )}
         </div>
