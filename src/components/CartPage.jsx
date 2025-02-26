@@ -1,57 +1,91 @@
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./CartPage.css";
 
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import './CartPage.css';
+const CartPage = () => {
+  const [cart, setCart] = useState([]);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
-function CartPage() {
-    const [cart, setCart] = useState([]);
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+      const cartKey = `cart_${storedUser.username}`;
+      const storedCart = JSON.parse(localStorage.getItem(cartKey)) || [];
+      setCart(storedCart);
+    }
+  }, []);
 
-    useEffect(() => {
-        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-        setCart(storedCart);
-    }, []);
+  const handleRemoveItem = (productId) => {
+    const updatedCart = cart.filter((item) => item.id !== productId);
+    setCart(updatedCart);
 
-    const handleRemoveItem = (index) => {
-        const updatedCart = [...cart];
-        updatedCart.splice(index, 1);
-        setCart(updatedCart);
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
-    };
+    if (user) {
+      localStorage.setItem(`cart_${user.username}`, JSON.stringify(updatedCart));
+    }
 
-    const getTotalPrice = () => {
-        return cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
-    };
+    // 🔥 Dispatch event to update Header cart count
+    window.dispatchEvent(new Event("storage"));
+  };
 
+  const handleClearCart = () => {
+    setCart([]);
+    if (user) {
+      localStorage.removeItem(`cart_${user.username}`);
+    }
+    // 🔥 Dispatch event to update Header cart count
+    window.dispatchEvent(new Event("storage"));
+  };
+
+  const handleCheckout = () => {
+    alert("Proceeding to checkout...");
+    handleClearCart();
+  };
+
+  // If no user is logged in, redirect to login
+  if (!user) {
     return (
-        <div className="cart-page">
-            <Link to="/" className="back-button">← Continue Shopping</Link>
-            <h2>Shopping Cart</h2>
-
-            {cart.length === 0 ? (
-                <p>Your cart is empty</p>
-            ) : (
-                <>
-                    <ul className="cart-list">
-                        {cart.map((item, index) => (
-                            <li key={index} className="cart-item">
-                                <img src={item.image} alt={item.title} className="cart-item-image" />
-                                <div className="cart-item-details">
-                                    <p><strong>{item.title}</strong></p>
-                                    <p><strong>Price:</strong> ${item.price}</p>
-                                    <p><strong>Quantity:</strong> {item.quantity}</p>
-                                    <p><strong>Total:</strong> ${item.price * item.quantity}</p>
-                                </div>
-                                <button className="remove-item" onClick={() => handleRemoveItem(index)}>Remove</button>
-                            </li>
-                        ))}
-                    </ul>
-
-                    <h3>Total: ${getTotalPrice()}</h3>
-                    <Link to="/CheckoutPage" className="checkout-button">Proceed to Checkout</Link>
-                </>
-            )}
-        </div>
+      <div className="cart-page">
+        <h2>Please <Link to="/login">Login</Link> to view your cart.</h2>
+      </div>
     );
-}
+  }
+
+  return (
+    <div className="cart-page">
+      <h1>{user.username}'s Shopping Cart</h1>
+      
+      {cart.length === 0 ? (
+        <p>Your cart is empty.</p>
+      ) : (
+        <div>
+          <ul className="cart-list">
+            {cart.map((item) => (
+              <li key={item.id} className="cart-item">
+                <img src={item.image} alt={item.title} className="cart-item-image" />
+                <div className="cart-item-details">
+                  <p><strong>{item.title}</strong></p>
+                  <p>Price: ${item.price}</p>
+                  <p>Quantity: {item.quantity}</p>
+                  <button className="remove-btn" onClick={() => handleRemoveItem(item.id)}>
+                    Remove
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div className="cart-actions">
+            <button className="clear-cart" onClick={handleClearCart}>Clear Cart</button>
+            <button className="checkout-btn" onClick={handleCheckout}>Checkout</button>
+          </div>
+        </div>
+      )}
+      
+      <Link to="/" className="back-button">← Continue Shopping</Link>
+    </div>
+  );
+};
 
 export default CartPage;

@@ -1,0 +1,57 @@
+.profile-container {
+    width: 320px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #f4f4f4;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .profile-container h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .profile-container label {
+    display: block;
+    font-weight: bold;
+    margin: 10px 0 5px;
+    text-align: left;
+  }
+  
+  .profile-container input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .save-btn, .back-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  .save-btn {
+    background: #27ae60;
+    color: white;
+  }
+  
+  .save-btn:hover {
+    background: #219150;
+  }
+  
+  .back-btn {
+    background: #e74c3c;
+    color: white;
+  }
+  
+  .back-btn:hover {
+    background: #c0392b;
+  }
+  

@@ -1,98 +1,45 @@
-
-.cart-page {
-    max-width: 800px;
-    margin: 0 auto;
+.cart-container {
+    width: 80%;
+    margin: 20px auto;
     padding: 20px;
-    text-align: center;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.back-button {
-    display: inline-block;
-    margin-bottom: 15px;
-    padding: 8px 12px;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-.back-button:hover {
-    background-color: #0056b3;
-}
-
-h2 {
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.cart-list {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cart-list {
     list-style-type: none;
     padding: 0;
-}
-
-.cart-item {
+  }
+  
+  .cart-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    background: #fff;
+    margin-bottom: 20px;
     padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.cart-item img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 5px;
-}
-
-.cart-item-details {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .cart-item-image {
+    width: 100px;
+    height: auto;
+    margin-right: 20px;
+  }
+  
+  .cart-item-details {
     flex-grow: 1;
-    text-align: left;
-    margin-left: 15px;
-}
-
-.cart-item-details p {
-    margin: 5px 0;
-}
-
-.remove-item {
-    background-color: #dc3545;
+  }
+  
+  .remove-btn {
+    background-color: red;
     color: white;
     border: none;
     padding: 8px 12px;
     cursor: pointer;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-.remove-item:hover {
-    background-color: #c82333;
-}
-
-.checkout-button {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 15px;
-    background-color: #28a745;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-.checkout-button:hover {
-    background-color: #218838;
-}
-
-h3 {
-    margin-top: 20px;
-    font-size: 20px;
-    color: #333;
-}
+    border-radius: 4px;
+  }
+  
+  .remove-btn:hover {
+    background-color: darkred;
+  }
+  

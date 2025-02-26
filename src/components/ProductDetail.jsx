@@ -1,38 +1,34 @@
-
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import "./APICall.css";
 
 function ProductDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [availableStock, setAvailableStock] = useState(0);
   const [cart, setCart] = useState([]);
-  const [quantity, setQuantity] = useState(1); // New state to track selected quantity
+  const [quantity, setQuantity] = useState(1);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     fetch(`https://fakestoreapi.com/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
-        setAvailableStock(data.rating.count); // Set available stock from API
+        setAvailableStock(data.rating.count);
       })
-      .catch((err) => console.error("Error fetching product details:", err));
+      .catch((err) => console.error("Error fetching product:", err));
 
-    // Load cart from localStorage
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(storedCart);
-  }, [id]);
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    setUser(storedUser);
 
-  const handleBuyNow = () => {
-    if (quantity > availableStock) {
-      alert("Not enough stock available!");
-      return;
+    if (storedUser) {
+      const cartKey = `cart_${storedUser.username}`;
+      const storedCart = JSON.parse(localStorage.getItem(cartKey)) || [];
+      setCart(storedCart);
     }
-
-    setAvailableStock((prevStock) => prevStock - quantity);
-    alert(`Order placed successfully! (${quantity} item(s) purchased)`);
-  };
+  }, [id]);
 
   const handleAddToCart = () => {
     if (quantity > availableStock) {
@@ -40,20 +36,42 @@ function ProductDetail() {
       return;
     }
 
-    const updatedCart = [...cart];
+    if (!user) {
+      alert("Please log in to add items to the cart.");
+      return;
+    }
 
-    // Check if the item already exists in the cart
+    const cartKey = `cart_${user.username}`;
+    const updatedCart = JSON.parse(localStorage.getItem(cartKey)) || [];
+
     const existingItemIndex = updatedCart.findIndex((item) => item.id === product.id);
     if (existingItemIndex !== -1) {
-      updatedCart[existingItemIndex].quantity += quantity; 
+      updatedCart[existingItemIndex].quantity += quantity;
     } else {
-      updatedCart.push({ ...product, quantity }); 
+      updatedCart.push({ ...product, quantity });
     }
 
     setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    setAvailableStock((prevStock) => prevStock - quantity); // Reduce available stock
+    localStorage.setItem(cartKey, JSON.stringify(updatedCart));
+    setAvailableStock((prevStock) => prevStock - quantity);
+
+    window.dispatchEvent(new Event("storage"));
     alert(`${quantity} item(s) added to cart!`);
+  };
+
+  const handleBuyNow = () => {
+    if (!user) {
+      alert("Please log in first to proceed to payment.");
+      return;
+    }
+
+    if (quantity > availableStock) {
+      alert("Not enough stock available!");
+      return;
+    }
+
+    setAvailableStock((prevStock) => prevStock - quantity);
+    navigate("/payment");
   };
 
   if (!product) return <div>Loading...</div>;
@@ -72,7 +90,6 @@ function ProductDetail() {
           <p><strong>Available Stock:</strong> {availableStock}</p>
           <p><strong>Rating:</strong> {product.rating.rate} ⭐</p>
 
-        
           <div className="quantity-selector">
             <label htmlFor="quantity">Quantity:</label>
             <input
@@ -92,27 +109,7 @@ function ProductDetail() {
         </div>
       </div>
 
-      {/* Cart Section */}
-      <div className="cart-section">
-        <h2>Shopping Cart</h2>
-        {cart.length === 0 ? (
-          <p>Your cart is empty</p>
-        ) : (
-          <ul className="cart-list">
-            {cart.map((item, index) => (
-              <li key={index} className="cart-item">
-                <img src={item.image} alt={item.title} className="cart-item-image" />
-                <div>
-                  <p>{item.title}</p>
-                  <p><strong>Price:</strong> ${item.price}</p>
-                  <p><strong>Quantity:</strong> {item.quantity}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-        <Link to="/CartPage" className="cart-button"> View Full Cart</Link>
-      </div>
+      
     </div>
   );
 }

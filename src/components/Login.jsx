@@ -1,41 +1,50 @@
-// Login.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [loginData, setLoginData] = useState({ username: "", password: "" });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("https://fakestoreapi.com/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-      const data = await response.json();
-      console.log("Login response:", data);
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        navigate("/");
-      } else {
-        alert("Invalid credentials");
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
+  const handleLogin = () => {
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    const validUser = users.find(
+      (u) => u.username === loginData.username && u.password === loginData.password
+    );
+
+    if (validUser) {
+      localStorage.setItem("user", JSON.stringify(validUser));
+      setError("");
+      navigate("/");
+    } else {
+      setError("Invalid username or password");
     }
   };
 
   return (
-    <div>
+    <div className="auth-container">
       <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        <button type="submit">Login</button>
-      </form>
+      <input
+        type="text"
+        placeholder="Username"
+        value={loginData.username}
+        onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={loginData.password}
+        onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+      />
+      
+      <button onClick={handleLogin}>Login</button>
+      {error && <p className="error-message">{error}</p>}
+
+      <p className="signup-text">
+        Don't have an account? 
+        <button className="signup-btn" onClick={() => navigate("/register")}>Sign Up</button>
+      </p>
     </div>
   );
 };
