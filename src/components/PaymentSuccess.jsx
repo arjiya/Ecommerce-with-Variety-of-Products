@@ -1,53 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 const PaymentSuccess = () => {
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [status, setStatus] = useState("Verifying Payment...");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const verifyEsewaPayment = async () => {
-      const transactionId = searchParams.get("txn_id");
-      if (!transactionId) {
-        setStatus("Invalid transaction.");
-        return;
-      }
+    const txn_id = searchParams.get("txn_id");
+    const amount = 1000; // Replace with actual amount from state
 
-      const verificationUrl = `https://rc-epay.esewa.com.np/api/epay/verify`;
-      const body = new URLSearchParams({
-        amt: "100",
-        pid: transactionId,
-        rid: transactionId, // eSewa Transaction ID (for testing)
-        scd: "epay_payment",
-      });
-
-      try {
-        const response = await fetch(verificationUrl, {
-          method: "POST",
-          body,
+    if (txn_id) {
+      fetch("http://localhost:5000/verify-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ txn_id, amount }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            alert("Payment Successful!");
+          } else {
+            alert("Payment Verification Failed!");
+            navigate("/payment-failed");
+          }
         });
-        const result = await response.text();
+    }
+  }, [searchParams, navigate]);
 
-        if (result.includes("Success")) {
-          setStatus("Payment Successful! 🎉");
-        } else {
-          setStatus("Payment Verification Failed.");
-        }
-      } catch (error) {
-        setStatus("Error verifying payment.");
-      }
-    };
-
-    verifyEsewaPayment();
-  }, [searchParams]);
-
-  return (
-    <div className="payment-success">
-      <h2>{status}</h2>
-      <button onClick={() => navigate("/")}>Go to Home</button>
-    </div>
-  );
+  return <h2>Payment Successful! Thank you for your purchase.</h2>;
 };
 
 export default PaymentSuccess;

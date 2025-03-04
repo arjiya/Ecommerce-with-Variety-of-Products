@@ -1,6 +1,7 @@
+
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import "./APICall.css";
+import "./ProductDetail.css";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -30,6 +31,7 @@ function ProductDetail() {
     }
   }, [id]);
 
+  // ✅ Add to Cart Handler
   const handleAddToCart = () => {
     if (quantity > availableStock) {
       alert("Not enough stock available!");
@@ -59,6 +61,7 @@ function ProductDetail() {
     alert(`${quantity} item(s) added to cart!`);
   };
 
+  // ✅ Buy Now Handler
   const handleBuyNow = () => {
     if (!user) {
       alert("Please log in first to proceed to payment.");
@@ -70,8 +73,13 @@ function ProductDetail() {
       return;
     }
 
-    setAvailableStock((prevStock) => prevStock - quantity);
-    navigate("/payment");
+    // 🔹 Store the selected product for direct checkout
+    localStorage.setItem(
+      "buy_now_product",
+      JSON.stringify({ ...product, quantity })
+    );
+
+    navigate("/payment"); // Redirect to Payment page
   };
 
   if (!product) return <div>Loading...</div>;
@@ -108,8 +116,6 @@ function ProductDetail() {
           </div>
         </div>
       </div>
-
-      
     </div>
   );
 }
