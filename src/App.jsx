@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Home from './Home/Home';
@@ -15,24 +13,21 @@ import CheckoutPage from './components/CheckoutPage';
 import PaymentResponsePage from './components/PaymentResponsePage';
 import Dashboard from './components/Dashboard';
 import Payment from './components/Payment';
-// import PaymentFailed from './components/PaymentFailed';
-// import PaymentSuccess from './components/PaymentSuccess';
+import PaymentSuccess from './components/PaymentSuccess';
+import PaymentFailure from './components/PaymentFailure';
 import khaltiConfig from './components/khaltiConfig';
 
 function App() {
   return (
     <Router>
       <Routes> 
-        
         <Route path="/" element={<Home />} />
-         <Route path="/product/:id" element={<ProductDetail />} />
-       
+        <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/category/:category" element={<CategoryPage />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/payment-failure" element={<PaymentFailure />} />
         <Route path="/khaltiConfig" element={<khaltiConfig/>} />
-{/* <Route path="/payment-success" element={<PaymentSuccess />} />
-<Route path="/payment-failed" element={<PaymentFailed />} /> */}
-        {/* <Route path="/Dashboard" element={<Dashboard />} /> */}
         <Route path="/Register" element={<Register/>} />
         <Route path="/Login" element={<Login/>} />
         <Route path="/search" element={<SearchResults />} />

@@ -1,0 +1,79 @@
+.payment-failure-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding: 2rem;
+}
+
+.failure-content {
+    background: white;
+    padding: 3rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+}
+
+.failure-icon {
+    font-size: 4rem;
+    color: #dc3545;
+    margin: 1.5rem 0;
+}
+
+.failure-content h2 {
+    color: #dc3545;
+    margin-bottom: 1rem;
+}
+
+.failure-content p {
+    color: #666;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.failure-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.try-again,
+.back-to-home {
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.try-again {
+    background-color: #dc3545;
+    color: white;
+}
+
+.back-to-home {
+    background-color: #f8f9fa;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.try-again:hover {
+    background-color: #c82333;
+}
+
+.back-to-home:hover {
+    background-color: #e9ecef;
+}
+
+@media (max-width: 600px) {
+    .failure-content {
+        padding: 2rem;
+    }
+
+    .failure-actions {
+        flex-direction: column;
+    }
+} 

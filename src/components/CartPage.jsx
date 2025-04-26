@@ -43,6 +43,29 @@ const CartPage = () => {
     handleClearCart();
   };
 
+  const handleAddToCart = (product) => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingItem = cart.find(item => item.id === product.id);
+    
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      // Set fixed test price of Rs 150 for all products
+      cart.push({
+        ...product,
+        price: 150, // Fixed test price
+        quantity: 1
+      });
+    }
+    
+    localStorage.setItem("cart", JSON.stringify(cart));
+    setCart(cart);
+  };
+
+  const calculateTotal = () => {
+    return cart.reduce((total, item) => total + (150 * item.quantity), 0); // Use fixed price
+  };
+
   // If no user is logged in, redirect to login
   if (!user) {
     return (

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import "./ProductDetail.css";
@@ -73,9 +72,16 @@ function ProductDetail() {
       return;
     }
 
+    // Set fixed test price of Rs 150 for all products
+    const testProduct = {
+      ...product,
+      price: 150, // Fixed test price
+      quantity
+    };
+
     localStorage.setItem(
       "buy_now_product",
-      JSON.stringify({ ...product, quantity })
+      JSON.stringify(testProduct)
     );
 
     navigate("/payment"); 
