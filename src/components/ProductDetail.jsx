@@ -73,13 +73,12 @@ function ProductDetail() {
       return;
     }
 
-    // 🔹 Store the selected product for direct checkout
     localStorage.setItem(
       "buy_now_product",
       JSON.stringify({ ...product, quantity })
     );
 
-    navigate("/payment"); // Redirect to Payment page
+    navigate("/payment"); 
   };
 
   if (!product) return <div>Loading...</div>;
@@ -87,7 +86,7 @@ function ProductDetail() {
 
   return (
     <div className="product-detail">
-      <Link to="/" className="back-button">← Back to Products</Link>
+    
       <div className="product-detail-card">
         <img className="product-detail-image" src={product.image} alt={product.title} />
         <div className="product-detail-info">
@@ -113,6 +112,9 @@ function ProductDetail() {
           <div className="button-container">
             <button className="buy-now" onClick={handleBuyNow}>Buy Now</button>
             <button className="add-to-cart" onClick={handleAddToCart}>Add to Cart</button>
+            <br />
+            <br />
+            <Link to="/" className="back-button">← Back to Products</Link>
           </div>
         </div>
       </div>
