@@ -1,60 +1,92 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import "./Profile.css";
 
-const Profile = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+function Profile() {
+  const [user, setUser] = useState(null);
+  const [newUsername, setNewUsername] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
+    setUser(storedUser);
     if (storedUser) {
-      setUsername(storedUser.username);
-      setPassword(storedUser.password || ""); // Assuming password was stored
-    } else {
-      navigate("/Login"); // Redirect to login if no user is found
+      setNewUsername(storedUser.username);
+      setNewPassword(storedUser.password);
     }
-  }, [navigate]);
+  }, []);
 
-  const handleSave = () => {
-    if (!username || !password) {
-      alert("Username and password cannot be empty!");
+  const handleUpdate = () => {
+    if (!newUsername || !newPassword) {
+      setMessage("Username and password cannot be empty.");
       return;
     }
 
-    const updatedUser = { username, password };
+    const allUsers = JSON.parse(localStorage.getItem("users")) || [];
+    const userIndex = allUsers.findIndex(u => u.username === user.username);
+
+    if (userIndex === -1) {
+      setMessage("User not found.");
+      return;
+    }
+
+    // Check for duplicate username
+    const isUsernameTaken = allUsers.some((u, index) =>
+      u.username === newUsername && index !== userIndex
+    );
+    if (isUsernameTaken) {
+      setMessage("Username already taken.");
+      return;
+    }
+
+    // Update user info
+    allUsers[userIndex].username = newUsername;
+    allUsers[userIndex].password = newPassword;
+    localStorage.setItem("users", JSON.stringify(allUsers));
+
+    const updatedUser = { ...user, username: newUsername, password: newPassword };
     localStorage.setItem("user", JSON.stringify(updatedUser));
-    alert("Profile updated successfully!");
+    setUser(updatedUser);
+
+    // Rename cart if username changed
+    if (user.username !== newUsername) {
+      const oldCartKey = `cart_${user.username}`;
+      const newCartKey = `cart_${newUsername}`;
+      const cart = JSON.parse(localStorage.getItem(oldCartKey)) || [];
+      localStorage.removeItem(oldCartKey);
+      localStorage.setItem(newCartKey, JSON.stringify(cart));
+    }
+
+    setMessage("Profile updated successfully.");
   };
+
+  if (!user) {
+    return <div className="profile-container">Please log in to access your profile.</div>;
+  }
 
   return (
     <div className="profile-container">
-      <h2>Edit Profile</h2>
-
-      <label>Username:</label>
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-
-      <label>Password:</label>
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-
-      <button className="save-btn" onClick={handleSave}>
-        Save Changes
-      </button>
-
-      <button className="back-btn" onClick={() => navigate("/")}>
-        Back to Home
-      </button>
+      <h2>Update Profile</h2>
+      <div className="form-group">
+        <label>New Username:</label>
+        <input
+          type="text"
+          value={newUsername}
+          onChange={(e) => setNewUsername(e.target.value)}
+        />
+      </div>
+      <div className="form-group">
+        <label>New Password:</label>
+        <input
+          type="password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+      </div>
+      <button onClick={handleUpdate}>Update Profile</button>
+      {message && <p className="message">{message}</p>}
     </div>
   );
-};
+}
 
 export default Profile;

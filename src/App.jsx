@@ -16,6 +16,8 @@ import Payment from './components/Payment';
 import PaymentSuccess from './components/PaymentSuccess';
 import PaymentFailure from './components/PaymentFailure';
 import khaltiConfig from './components/khaltiConfig';
+import ReceiptPage from './components/ReceiptPage';
+
 
 function App() {
   return (
@@ -30,12 +32,15 @@ function App() {
         <Route path="/khaltiConfig" element={<khaltiConfig/>} />
         <Route path="/Register" element={<Register/>} />
         <Route path="/Login" element={<Login/>} />
-        <Route path="/search" element={<SearchResults />} />
+        {/* <Route path="/search" element={<SearchResults />} /> */}
         <Route path="/CartPage" element={<CartPage/>} />
+        <Route path="/receipt" element={<ReceiptPage />} />
         <Route path="/addToCart" element={<addToCart/>} />
-        <Route path="/CheckoutPage" element={<CheckoutPage/>} />
+        {/* <Route path="/CheckoutPage" element={<CheckoutPage/>} /> */}
         <Route path="/Profile" element={<Profile/>} />
-        <Route path="/PaymentResponsePage" element={<PaymentResponsePage/>} />  
+      
+
+        {/* <Route path="/PaymentResponsePage" element={<PaymentResponsePage/>} />   */}
       </Routes>
     </Router>
   );

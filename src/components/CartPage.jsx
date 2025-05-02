@@ -25,7 +25,6 @@ const CartPage = () => {
       localStorage.setItem(`cart_${user.username}`, JSON.stringify(updatedCart));
     }
 
-    // 🔥 Dispatch event to update Header cart count
     window.dispatchEvent(new Event("storage"));
   };
 
@@ -34,39 +33,36 @@ const CartPage = () => {
     if (user) {
       localStorage.removeItem(`cart_${user.username}`);
     }
-    // 🔥 Dispatch event to update Header cart count
+
     window.dispatchEvent(new Event("storage"));
   };
 
   const handleCheckout = () => {
-    alert("Proceeding to checkout...");
-    handleClearCart();
+    navigate("/Payment");
   };
 
   const handleAddToCart = (product) => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const existingItem = cart.find(item => item.id === product.id);
-    
+
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      // Set fixed test price of Rs 150 for all products
       cart.push({
         ...product,
         price: 150, // Fixed test price
         quantity: 1
       });
     }
-    
+
     localStorage.setItem("cart", JSON.stringify(cart));
     setCart(cart);
   };
 
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + (150 * item.quantity), 0); // Use fixed price
+    return cart.reduce((total, item) => total + (150 * item.quantity), 0);
   };
 
-  // If no user is logged in, redirect to login
   if (!user) {
     return (
       <div className="cart-page">
@@ -78,12 +74,12 @@ const CartPage = () => {
   return (
     <div className="cart-page">
       <h1>{user.username}'s Shopping Cart</h1>
-      
+
       {cart.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <div>
-          <ul className="cart-list">
+          <ul className="cart-list"> 
             {cart.map((item) => (
               <li key={item.id} className="cart-item">
                 <img src={item.image} alt={item.title} className="cart-item-image" />
@@ -105,8 +101,8 @@ const CartPage = () => {
           </div>
         </div>
       )}
-      
-      <Link to="/" className="back-button">← Continue Shopping</Link>
+
+      {/* <Link to="/" className="back-button">← Continue Shopping</Link> */}
     </div>
   );
 };
