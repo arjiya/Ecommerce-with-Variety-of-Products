@@ -5,7 +5,10 @@ import "./APICall.css";
 
 function APICall() {
   const [products, setProducts] = useState([]);
+  const [query, setQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
+  // Load all products initially
   useEffect(() => {
     fetch("http://127.0.0.1:5000/products")
       .then((res) => res.json())
@@ -13,11 +16,44 @@ function APICall() {
       .catch((err) => console.log("Error fetching products:", err));
   }, []);
 
+  // Search function
+  const handleSearch = () => {
+    if (!query) {
+      setSearchResults([]);
+      return;
+    }
+
+    fetch(`http://127.0.0.1:5000/search?q=${encodeURIComponent(query)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          console.log("Error:", data.error);
+          setSearchResults([]);
+        } else {
+          setSearchResults(data);
+        }
+      })
+      .catch((err) => console.log("Search error:", err));
+  };
+
+  // Show search results if available, otherwise all products
+  const displayProducts = searchResults.length > 0 ? searchResults : products;
+
   return (
     <div className="api">
       <div className="api-container">
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button onClick={handleSearch}>Search</button>
+        </div>
+
         <div className="product-grid">
-          {products.map((item) => (
+          {displayProducts.map((item) => (
             <div className="product-card" key={item.id}>
               <Link to={`/product/${item.id}`}>
                 <img
