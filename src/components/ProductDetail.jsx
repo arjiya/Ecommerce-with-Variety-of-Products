@@ -1,108 +1,45 @@
 
-// import React, { useState } from "react";
-// import { Link } from "react-router-dom";
-// import "./PaymentSuccess.css";
-
-// const PaymentSuccess = () => {
-//   const [showReceipt, setShowReceipt] = useState(false);
-
-//   const handleShowReceipt = () => {
-//     setShowReceipt(true);
-//   };
-
-//   const handleCloseReceipt = () => {
-//     setShowReceipt(false);
-//   };
-
-//   const product = JSON.parse(localStorage.getItem("buy_now_product"));
-//   const user = JSON.parse(localStorage.getItem("user"));
-
-//   if (!product || !user) {
-//     return <div>Unable to fetch product or user data</div>;
-//   }
-
-//   const receiptContent = `
-//     Receipt
-//     ------------------------
-//     Buyer: ${user.username}
-//     Product: ${product.title}
-//     Quantity: ${product.quantity}
-//     Price per item: Rs ${product.price}
-//     Total: Rs ${product.price * product.quantity}
-//     ------------------------
-//     Thank you for shopping with us!
-//   `;
-
-//   return (
-//     <div className="payment-success-container">
-//       <div className="success-content">
-//         <h2>Payment Successful!</h2>
-//         <div className="success-icon">✓</div>
-//         <p>Thank you for your purchase. Your order has been placed successfully.</p>
-//         <div className="success-actions">
-//           <Link to="/" className="continue-shopping">Continue Shopping</Link>
-//           <button className="view-orders" onClick={handleShowReceipt}>View Receipt</button>
-//         </div>
-//       </div>
-
-//       {/* Receipt Modal */}
-//       {showReceipt && (
-//         <div className="receipt-popup-overlay">
-//           <div className="receipt-popup-box">
-//             <h3>Receipt</h3>
-//             <pre>{receiptContent}</pre>
-//             <button onClick={handleCloseReceipt} className="close-receipt-btn">
-//               Close
-//             </button>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default PaymentSuccess;
-
-
 
 // import React, { useEffect, useState } from "react";
 // import { useParams, useNavigate } from "react-router-dom";
 // import axios from "axios";
 // import "./ProductDetail.css";
 
+// // Small reusable component for recommended cards
+// function RecommendedCard({ item, navigate }) {
+//   return (
+//     <div className="recommended-card">
+//       <img
+//         src={item.image || "https://via.placeholder.com/150"}
+//         alt={item.title}
+//         className="recommended-img"
+//       />
+//       <p className="recommended-name">{item.title}</p>
+//       <button
+//         className="view-btn"
+//         onClick={() => navigate(`/product/${item.id}`)}
+//       >
+//         View
+//       </button>
+//     </div>
+//   );
+// }
+
 // function ProductDetail() {
 //   const { id } = useParams();
 //   const navigate = useNavigate();
+
 //   const [product, setProduct] = useState(null);
 //   const [availableStock, setAvailableStock] = useState(0);
 //   const [quantity, setQuantity] = useState(1);
 //   const [user, setUser] = useState(null);
 
-//   // Recommended products
-//   const [recommended, setRecommended] = useState([]);
+//   // Recommendations
+//   const [youMayLike, setYouMayLike] = useState([]);
+//   const [popular, setPopular] = useState([]);
 
-//   useEffect(() => {
-//     // Fetch selected product
-//     fetch(`https://fakestoreapi.com/products/${id}`)
-//       .then((res) => res.json())
-//       .then((data) => {
-//         setProduct(data);
-//         setAvailableStock(data.rating.count || 10); // fallback stock
-//       })
-//       .catch((err) => console.error("Error fetching product:", err));
-
-//     // Load user
-//     const storedUser = JSON.parse(localStorage.getItem("user"));
-//     setUser(storedUser);
-
-//     // Fetch Recommendations from backend
-//     axios
-//       .get(`http://localhost:8000/recommend/${id}`)
-//       .then((res) => setRecommended(res.data))
-//       .catch((err) => console.log("Recommendation API error:", err));
-//   }, [id]);
-
-//   // Add to cart
+  
+//   // Add to cart function
 //   const handleAddToCart = () => {
 //     if (!user) {
 //       alert("Please log in to add items to the cart.");
@@ -126,8 +63,8 @@
 //         id: product.id,
 //         title: product.title,
 //         price: product.price,
-//         image: product.image, // ✅ Important for CartPage
-//         quantity: quantity
+//         image: product.image,
+//         quantity: quantity,
 //       });
 //     }
 
@@ -136,7 +73,7 @@
 //     alert(`${quantity} item(s) added to cart!`);
 //   };
 
-//   // Buy now
+//   // Buy now function
 //   const handleBuyNow = () => {
 //     if (!user) {
 //       alert("Please log in first to proceed to payment.");
@@ -152,8 +89,8 @@
 //       id: product.id,
 //       title: product.title,
 //       price: product.price,
-//       image: product.image, // ✅ Important
-//       quantity: quantity
+//       image: product.image,
+//       quantity: quantity,
 //     };
 
 //     localStorage.setItem("buy_now_product", JSON.stringify(buyNowProduct));
@@ -165,6 +102,7 @@
 
 //   return (
 //     <div className="product-detail">
+//       {/* Main product info */}
 //       <div className="product-detail-card">
 //         <img
 //           className="product-detail-image"
@@ -211,28 +149,26 @@
 //         </div>
 //       </div>
 
-//       {/* Recommended Products */}
+//       {/* Content-based recommendations */}
 //       <h2 className="recommended-title">You May Also Like</h2>
 //       <div className="recommended-container">
-//         {recommended.length === 0 ? (
+//         {youMayLike.length === 0 ? (
 //           <p>No recommendations available.</p>
 //         ) : (
-//           recommended.map((item) => (
-//             <div key={item.id} className="recommended-card">
-//               <img
-//                 src={item.image || "https://via.placeholder.com/150"}
-//                 alt={item.title}
-//                 className="recommended-img"
-//               />
-//               <p className="recommended-name">{item.title}</p>
+//           youMayLike.map((item) => (
+//             <RecommendedCard key={item.id} item={item} navigate={navigate} />
+//           ))
+//         )}
+//       </div>
 
-//               <button
-//                 className="view-btn"
-//                 onClick={() => navigate(`/product/${item.id}`)}
-//               >
-//                 View
-//               </button>
-//             </div>
+//       {/* Popular products */}
+//       <h2 className="recommended-title">Popular Products</h2>
+//       <div className="recommended-container">
+//         {popular.length === 0 ? (
+//           <p>No popular products available.</p>
+//         ) : (
+//           popular.map((item) => (
+//             <RecommendedCard key={item.id} item={item} navigate={navigate} />
 //           ))
 //         )}
 //       </div>
@@ -243,9 +179,65 @@
 // export default ProductDetail;
 
 
+
+// import React, { useEffect, useState } from "react";
+// import { useParams } from "react-router-dom";
+// import "./ProductDetail.css";
+
+// function ProductDetail() {
+//   const { id } = useParams();
+//   const [product, setProduct] = useState(null);
+//   const [recommendations, setRecommendations] = useState([]);
+
+//   useEffect(() => {
+//     // Fetch single product
+//     fetch(`http://127.0.0.1:5000/product/${id}`)
+//       .then(res => res.json())
+//       .then(data => setProduct(data))
+//       .catch(err => console.log(err));
+
+//     // Fetch recommendations
+//     fetch(`http://127.0.0.1:5000/recommend/${id}`)
+//       .then(res => res.json())
+//       .then(data => setRecommendations(data.you_may_like || []))
+//       .catch(err => console.log(err));
+//   }, [id]);
+
+//   if (!product) return <p>Loading product...</p>;
+
+//   return (
+//     <div>
+//       <h1>{product.title}</h1>
+//       <img
+//         src={product.image || "https://via.placeholder.com/200"}
+//         alt={product.title}
+//         width="200"
+//       />
+//       <p>{product.description}</p>
+//       <p>Price: ${product.price}</p>
+//       <p>Category: {product.category}</p>
+
+//       <h2>You May Also Like</h2>
+//       <div style={{ display: "flex", gap: "20px" }}>
+//         {recommendations.map(item => (
+//           <div key={item.id}>
+//             <img
+//               src={item.image || "https://via.placeholder.com/100"}
+//               alt={item.title}
+//               width="100"
+//             />
+//             <p>{item.title}</p>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default ProductDetail;
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import "./ProductDetail.css";
 
 // Small reusable component for recommended cards
@@ -273,39 +265,37 @@ function ProductDetail() {
   const navigate = useNavigate();
 
   const [product, setProduct] = useState(null);
-  const [availableStock, setAvailableStock] = useState(0);
+  const [availableStock, setAvailableStock] = useState(10);
   const [quantity, setQuantity] = useState(1);
   const [user, setUser] = useState(null);
 
-  // Recommendations
   const [youMayLike, setYouMayLike] = useState([]);
   const [popular, setPopular] = useState([]);
 
   useEffect(() => {
-    // Fetch selected product from fake store API
-    fetch(`https://fakestoreapi.com/products/${id}`)
+    // Fetch product from backend CSV
+    fetch(`http://127.0.0.1:5000/product/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
-        setAvailableStock(data.rating?.count || 10); // fallback stock
+        setAvailableStock(data.rating?.count || 10); // fallback
       })
-      .catch((err) => console.error("Error fetching product:", err));
+      .catch((err) => console.log("Error fetching product:", err));
 
     // Load user from localStorage
     const storedUser = JSON.parse(localStorage.getItem("user"));
     setUser(storedUser);
 
-    // Fetch hybrid recommendations from backend
-    axios
-      .get(`http://localhost:8000/recommend/${id}`)
-      .then((res) => {
-        setYouMayLike(res.data.you_may_like || []);
-        setPopular(res.data.popular || []);
+    // Fetch recommendations from backend
+    fetch(`http://127.0.0.1:5000/recommend/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setYouMayLike(data.you_may_like || []);
+        setPopular(data.popular || []);
       })
-      .catch((err) => console.log("Recommendation API error:", err));
+      .catch((err) => console.log("Error fetching recommendations:", err));
   }, [id]);
 
-  // Add to cart function
   const handleAddToCart = () => {
     if (!user) {
       alert("Please log in to add items to the cart.");
@@ -321,7 +311,6 @@ function ProductDetail() {
     const storedCart = JSON.parse(localStorage.getItem(cartKey)) || [];
 
     const existingItem = storedCart.find((item) => item.id === product.id);
-
     if (existingItem) {
       existingItem.quantity += quantity;
     } else {
@@ -335,11 +324,10 @@ function ProductDetail() {
     }
 
     localStorage.setItem(cartKey, JSON.stringify(storedCart));
-    setAvailableStock((prevStock) => prevStock - quantity);
+    setAvailableStock((prev) => prev - quantity);
     alert(`${quantity} item(s) added to cart!`);
   };
 
-  // Buy now function
   const handleBuyNow = () => {
     if (!user) {
       alert("Please log in first to proceed to payment.");
@@ -351,20 +339,14 @@ function ProductDetail() {
       return;
     }
 
-    const buyNowProduct = {
-      id: product.id,
-      title: product.title,
-      price: product.price,
-      image: product.image,
-      quantity: quantity,
-    };
-
-    localStorage.setItem("buy_now_product", JSON.stringify(buyNowProduct));
+    localStorage.setItem(
+      "buy_now_product",
+      JSON.stringify({ ...product, quantity })
+    );
     navigate("/payment");
   };
 
-  if (!product) return <div>Loading...</div>;
-  if (!product.title) return <div>Product not found</div>;
+  if (!product) return <p>Loading product...</p>;
 
   return (
     <div className="product-detail">
@@ -372,10 +354,9 @@ function ProductDetail() {
       <div className="product-detail-card">
         <img
           className="product-detail-image"
-          src={product.image}
+          src={product.image || "https://via.placeholder.com/300"}
           alt={product.title}
         />
-
         <div className="product-detail-info">
           <h1>{product.title}</h1>
           <p className="description">{product.description}</p>
@@ -415,7 +396,7 @@ function ProductDetail() {
         </div>
       </div>
 
-      {/* Content-based recommendations */}
+      {/* Recommendations */}
       <h2 className="recommended-title">You May Also Like</h2>
       <div className="recommended-container">
         {youMayLike.length === 0 ? (
@@ -427,7 +408,6 @@ function ProductDetail() {
         )}
       </div>
 
-      {/* Popular products */}
       <h2 className="recommended-title">Popular Products</h2>
       <div className="recommended-container">
         {popular.length === 0 ? (
