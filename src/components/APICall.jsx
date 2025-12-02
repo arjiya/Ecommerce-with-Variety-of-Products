@@ -1,7 +1,7 @@
 
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';  // Import Link for navigation
-import './APICall.css'; 
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'; // Import Link for navigation
+import './APICall.css';
 
 function APICall() {
     const [product, setProduct] = useState([]);
@@ -13,7 +13,6 @@ function APICall() {
             .catch(err => console.log("Error fetching data:", err));
            
     }, []);
-
     return (
         <div className='api'>
             <div className="api-container">

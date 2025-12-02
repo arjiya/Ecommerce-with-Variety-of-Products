@@ -9,8 +9,8 @@
 }
 
 .footer-top {
-    background: #37475a;
-    color:#37475a;
+    background: #232f3e;
+    color: #232f3e;
     padding: 10px 30px;
     font-size: 14px;
     font-weight: bold;
@@ -20,7 +20,7 @@
  
 }
 .footer-top p{
-  width:100%;
+  width:200%;
   max-width: 1800px;
 }
 .footer-top {
@@ -29,6 +29,7 @@
 }
 
 .back-to-top-btn {
+    
   color: white;
   padding: 10px 20px;
   font-size: 16px;
