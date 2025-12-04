@@ -1,14 +1,22 @@
 
 
-
 // import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
+// import { Link, useNavigate } from "react-router-dom";
 // import "./APICall.css";
 
 // function APICall() {
 //   const [products, setProducts] = useState([]);
 //   const [query, setQuery] = useState("");
 //   const [searchResults, setSearchResults] = useState([]);
+//   const navigate = useNavigate();
+
+//   // Check if user is logged in
+//   useEffect(() => {
+//     const user = localStorage.getItem("user");
+//     if (!user) {
+//       navigate("/login"); // redirect to login if not logged in
+//     }
+//   }, [navigate]);
 
 //   // Load all products initially
 //   useEffect(() => {
@@ -81,23 +89,15 @@
 // export default APICall;
 
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./APICall.css";
 
 function APICall() {
   const [products, setProducts] = useState([]);
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const navigate = useNavigate();
 
-  // Check if user is logged in
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (!user) {
-      navigate("/login"); // redirect to login if not logged in
-    }
-  }, [navigate]);
-
+  // ❌ Removed login redirect — APICall should be public
   // Load all products initially
   useEffect(() => {
     fetch("http://127.0.0.1:5000/api/products")
@@ -125,7 +125,7 @@ function APICall() {
       .catch((err) => console.log("Search error:", err));
   };
 
-  // Show search results if available, otherwise all products
+  // Show search results if available, otherwise show all products
   const displayProducts = searchResults.length > 0 ? searchResults : products;
 
   return (
@@ -151,9 +151,11 @@ function APICall() {
                   alt={item.title}
                 />
               </Link>
+
               <div className="product-info">
                 <div className="font-bold text-xl mb-2">{item.title}</div>
               </div>
+
               <div className="product-stats">
                 <span className="price">Price: ${item.price}</span>
                 <span className="category">Category: {item.category}</span>

@@ -20,6 +20,7 @@ import ReceiptPage from './components/ReceiptPage';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
 // import AdminPanel from './components/AdminPanel';
+import LoginPopup from './components/LoginPopup';
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
         <Route path="/khaltiConfig" element={<khaltiConfig/>} />
         <Route path="/Register" element={<Register/>} />
         <Route path="/Login" element={<Login/>} />
+         <Route path="/LoginPopup" element={<LoginPopup/>} />
       
         {/* <Route path="/search" element={<SearchResults />} /> */}
         <Route path="/CartPage" element={<CartPage/>} />

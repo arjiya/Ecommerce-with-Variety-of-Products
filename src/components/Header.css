@@ -1,4 +1,4 @@
-
+/* 
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -38,35 +38,6 @@
   align-items: center;
 }
 
-/* .search-box {
-  display: flex;
-  align-items: center;
-  background: #ffffff;
-  padding: 8px 12px;
-  border-radius: 25px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.search-box input {
-  border: none;
-  outline: none;
-  font-size: 14px;
-  width: 160px;
-  padding: 5px 10px;
-  border-radius: 20px;
-}
-
-.search-icon {
-  color: #3498db;
-  font-size: 18px;
-  margin-left: 8px;
-  cursor: pointer;
-  transition: color 0.3s ease-in-out;
-}
-
-.search-icon:hover {
-  color: #2980b9;
-} */
 
 .cart-button {
   background: none;
@@ -244,4 +215,173 @@
     right: 50%;
     transform: translateX(50%);
   }
+} */
+/* NAVBAR */
+.navbar {
+  width: 100%;
+  background-color: #1a1a1a;
+  padding: 12px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo a {
+  font-size: 26px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* CATEGORY DROPDOWN */
+.dropdown {
+  list-style: none;
+  position: relative;
+}
+
+.dropbtn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px 12px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #2e2e2e;
+  min-width: 160px;
+  top: 40px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a {
+  color: white;
+  padding: 10px;
+  display: block;
+  text-decoration: none;
+}
+
+.dropdown-content a:hover {
+  background-color: #444;
+}
+
+/* NAV LINKS */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  list-style: none;
+}
+
+/* CART BUTTON */
+.cart-button {
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cart-button:hover {
+  background-color: #444;
+}
+
+.cart-icon {
+  font-size: 18px;
+  color: white;
+}
+
+/* USER AREA */
+.user-menu {
+  position: relative;
+}
+
+/* WHEN LOGGED IN */
+.user-btn {
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.user-icon {
+  font-size: 18px;
+}
+
+/* WHEN LOGGED OUT - LOGIN BUTTON */
+.login-btn-header {
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+}
+
+.login-btn-header:hover {
+  background-color: #444;
+}
+
+.login-user-icon {
+  font-size: 18px;
+  color: white;
+}
+
+/* USER DROPDOWN MENU */
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: 42px;
+  background-color: #2b2b2b;
+  border-radius: 6px;
+  width: 150px;
+  overflow: hidden;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+}
+
+.user-dropdown button {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+}
+
+.user-dropdown button:hover {
+  background-color: #444;
+}
+
+.logout-btn {
+  color: #ff6b6b;
+}
+
+.logout-btn:hover {
+  background-color: #6b0000;
 }
