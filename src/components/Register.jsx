@@ -92,13 +92,16 @@
 // };
 
 // export default Register;
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { FaEye, FaEyeSlash, FaLock, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaLock, FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
+import "./Register.css";
+
+import { FaEnvelope } from "react-icons/fa";
 import "./Register.css";
 
 const Register = () => {
-  const [registerData, setRegisterData] = useState({ username: "", password: "" });
+  const [registerData, setRegisterData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -115,12 +118,18 @@ const Register = () => {
   }, [registerData]);
 
   const handleRegister = () => {
-    if (!registerData.username || !registerData.password) {
-      setError("Please enter both username and password");
+    if (!registerData.email || !registerData.password) {
+      setError("Please enter both email and password");
       return;
     }
 
-    // Replace localStorage logic with API call if using backend
+    // Email format validation (standard)
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(registerData.email)) {
+      setError("Please enter a valid email format (e.g. user@gmail.com)");
+      return;
+    }
+
     fetch("http://127.0.0.1:5000/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -130,7 +139,7 @@ const Register = () => {
       .then((data) => {
         if (data.success) {
           setError("");
-          setRegisterData({ username: "", password: "" });
+          setRegisterData({ email: "", password: "" });
           localStorage.removeItem("register_form");
           navigate("/login");
         } else {
@@ -149,15 +158,15 @@ const Register = () => {
       <h2>ShopNest Registration</h2>
 
       <div className="input-group">
-        <FaUser />
+        <FaEnvelope /> {/* Changed icon to Envelope */}
         <input
-          type="text"
-          placeholder="Username"
-          value={registerData.username}
-          onChange={(e) => setRegisterData({ ...registerData, username: e.target.value })}
+          type="email"
+          placeholder="Email Address"
+          value={registerData.email}
+          onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
         />
-        {registerData.username && (
-          <FaTimes className="clear-icon" onClick={() => handleClear("username")} />
+        {registerData.email && (
+          <FaTimes className="clear-icon" onClick={() => handleClear("email")} />
         )}
       </div>
 

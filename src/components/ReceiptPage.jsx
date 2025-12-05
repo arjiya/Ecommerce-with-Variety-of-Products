@@ -1,153 +1,111 @@
-// import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
-// import "./ReceiptPage.css";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./ReceiptPage.css";
 
-// const ReceiptPage = () => {
-//   const [product, setProduct] = useState(null);
-//   const [user, setUser] = useState(null);
-
-//   useEffect(() => {
-//     const fetchedProduct = JSON.parse(localStorage.getItem("buy_now_product"));
-//     const fetchedUser = JSON.parse(localStorage.getItem("user"));
-
-//     if (fetchedProduct && fetchedUser) {
-//       setProduct(fetchedProduct);
-//       setUser(fetchedUser);
-//     }
-//   }, []);
-
-//   const handleDownloadReceipt = () => {
-//     if (!product || !user) {
-//       alert("No product or user information found.");
-//       return;
-//     }
-
-//     const receiptContent = `
-//       Receipt
-//       ------------------------
-//       Buyer: ${user.username}
-//       Product: ${product.title}
-//       Quantity: ${product.quantity}
-//       Price per item: Rs ${product.price}
-//       Total: Rs ${product.price * product.quantity}
-//       ------------------------
-//       Thank you for shopping with us!
-//     `;
-
-//     const blob = new Blob([receiptContent], { type: "text/plain;charset=utf-8" });
-//     const url = URL.createObjectURL(blob);
-//     const a = document.createElement("a");
-//     a.href = url;
-//     a.download = "receipt.txt";
-//     a.click();
-//     URL.revokeObjectURL(url);
-//   };
-
-//   if (!product || !user) {
-//     return <div>Loading receipt...</div>;
-//   }
-
-//   return (
-//     <div className="receipt-page-container">
-//       <h2>Receipt</h2>
-//       <div className="receipt-details">
-//         <p><strong>Buyer:</strong> {user.username}</p>
-//         <p><strong>Product:</strong> {product.title}</p>
-//         <p><strong>Quantity:</strong> {product.quantity}</p>
-//         <p><strong>Price per item:</strong> Rs {product.price}</p>
-//         <p><strong>Total:</strong> Rs {product.price * product.quantity}</p>
-//       </div>
-//       <div className="receipt-actions">
-//         <button className="download-receipt" onClick={handleDownloadReceipt}>Download Receipt</button>
-//         <Link to="/" className="continue-shopping">Continue Shopping</Link>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ReceiptPage;
-
-
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaUser, FaLock, FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
-import "./Register.css";
-
-const Register = () => {
-  const [registerData, setRegisterData] = useState({ username: "", password: "" });
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+const ReceiptPage = () => {
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const handleRegister = async () => {
-    if (!registerData.username || !registerData.password) {
-      setError("Please enter both username and password");
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (!storedUser) {
+      alert("Please login first");
+      navigate("/login");
       return;
     }
 
-    try {
-      const response = await fetch("http://127.0.0.1:5000/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(registerData),
+    // Fetch user orders
+    fetch(`http://127.0.0.1:5000/api/orders/${storedUser.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          // Get the latest order (first in list as backend sorts desc)
+          setOrder(data[0]);
+        } else {
+          setOrder(null);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching orders:", err);
+        setLoading(false);
       });
-      const data = await response.json();
+  }, [navigate]);
 
-      if (data.success) {
-        setError("Registered successfully!");
-        navigate("/login"); // redirect to login
-      } else {
-        setError(data.message || "Registration failed");
-      }
-    } catch (err) {
-      setError("Server error, try again later");
-      console.log(err);
-    }
+  const handleDownloadReceipt = () => {
+    if (!order) return;
+
+    const receiptContent = `
+      SHOPNEST RECEIPT
+      ------------------------
+      Order ID: ${order.id}
+      Transaction ID: ${order.transaction_id || "N/A"}
+      Date: ${order.created_at}
+      ------------------------
+      Items:
+      ${order.items.map(item => `${item.title} (x${item.quantity}) - Rs ${item.price_at_purchase * item.quantity}`).join('\n      ')}
+      ------------------------
+      Total With Tax: Rs ${order.total_price}
+      Status: ${order.status}
+      ------------------------
+      Thank you for shopping with ShopNest!
+    `;
+
+    const blob = new Blob([receiptContent], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `receipt_order_${order.id}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
-  const handleClear = (field) => {
-    setRegisterData((prev) => ({ ...prev, [field]: "" }));
-  };
+  if (loading) return <div className="receipt-container">Loading receipt...</div>;
+
+  if (!order) {
+    return (
+      <div className="receipt-container">
+        <h2>No Orders Found</h2>
+        <Link to="/" className="continue-shopping">Start Shopping</Link>
+      </div>
+    );
+  }
 
   return (
-    <div className="auth-container">
-      <h2>ShopNest Registration</h2>
+    <div className="receipt-page-container">
+      <div className="receipt-card">
+        <h2>Payment Receipt</h2>
+        <div className="receipt-header">
+          <p><strong>Order ID:</strong> #{order.id}</p>
+          <p><strong>Date:</strong> {new Date(order.created_at).toLocaleString()}</p>
+          <p><strong>Status:</strong> <span className="status-badge">{order.status}</span></p>
+        </div>
 
-      <div className="input-group">
-        <FaUser />
-        <input
-          type="text"
-          placeholder="Username"
-          value={registerData.username}
-          onChange={(e) => setRegisterData({ ...registerData, username: e.target.value })}
-        />
-        {registerData.username && (
-          <FaTimes className="clear-icon" onClick={() => handleClear("username")} />
-        )}
+        <div className="receipt-items">
+          <h3>Items Purchased</h3>
+          <ul>
+            {order.items.map((item, index) => (
+              <li key={index}>
+                <span>{item.title} x {item.quantity}</span>
+                <span>Rs {item.price_at_purchase * item.quantity}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="receipt-total">
+          <h3>Total Paid: Rs {order.total_price}</h3>
+          {order.transaction_id && <p className="transaction-id">Transaction ID: {order.transaction_id}</p>}
+        </div>
+
+        <div className="receipt-actions">
+          <button className="download-receipt" onClick={handleDownloadReceipt}>Download Receipt</button>
+          <Link to="/" className="continue-shopping">Continue Shopping</Link>
+        </div>
       </div>
-
-      <div className="input-group">
-        <FaLock />
-        <input
-          type={showPassword ? "text" : "password"}
-          placeholder="Password"
-          value={registerData.password}
-          onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-        />
-        {registerData.password && (
-          <>
-            <span className="toggle-icon" onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
-            <FaTimes className="clear-icon" onClick={() => handleClear("password")} />
-          </>
-        )}
-      </div>
-
-      <button onClick={handleRegister}>Register</button>
-      {error && <p className="error-message">{error}</p>}
     </div>
   );
 };
 
-export default Register;
+export default ReceiptPage;

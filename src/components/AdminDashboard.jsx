@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
@@ -11,6 +11,8 @@ const AdminDashboard = () => {
     price: "",
     description: ""
   });
+
+  const [orders, setOrders] = useState([]);
 
   // ---------------- LOAD USERS ----------------
   const loadUsers = () => {
@@ -28,9 +30,18 @@ const AdminDashboard = () => {
       .catch(err => console.error("Error loading products:", err));
   };
 
+  // ---------------- LOAD ORDERS ----------------
+  const loadOrders = () => {
+    fetch("http://127.0.0.1:5000/api/admin/orders")
+      .then(res => res.json())
+      .then(data => setOrders(data))
+      .catch(err => console.error("Error loading orders:", err));
+  };
+
   useEffect(() => {
     loadUsers();
     loadProducts();
+    loadOrders();
   }, []);
 
   // ---------------- ADD PRODUCT ----------------
@@ -40,14 +51,21 @@ const AdminDashboard = () => {
       return;
     }
 
+    const formData = new FormData();
+    formData.append("title", productForm.title);
+    formData.append("price", productForm.price);
+    formData.append("description", productForm.description);
+    if (productForm.imageFile) {
+      formData.append("image", productForm.imageFile);
+    }
+
     await fetch("http://127.0.0.1:5000/api/products/add", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(productForm),
+      body: formData, // Send as FormData (no Content-Type header needed, browser sets it)
     });
 
     alert("Product Added");
-    setProductForm({ id: "", title: "", price: "", description: "" });
+    setProductForm({ id: "", title: "", price: "", description: "", imageFile: null });
     loadProducts();
   };
 
@@ -91,9 +109,68 @@ const AdminDashboard = () => {
     loadProducts();
   };
 
+  // ---------------- UPDATE ORDER STATUS ----------------
+  const updateOrderStatus = async (orderId, newStatus) => {
+    await fetch(`http://127.0.0.1:5000/api/admin/orders/${orderId}/status`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: newStatus })
+    });
+    loadOrders();
+  };
+
   return (
     <div className="admin-container">
       <h1 className="admin-title">ADMIN DASHBOARD</h1>
+
+      {/* ---------------- ORDERS TABLE ---------------- */}
+      <div className="section">
+        <h2>User Orders</h2>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>User</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map(order => (
+              <tr key={order.id}>
+                <td>{order.id}</td>
+                <td>{order.username} (ID: {order.user_id})</td>
+                <td>
+                  <ul style={{ margin: 0, paddingLeft: "15px" }}>
+                    {order.items && order.items.map(item => (
+                      <li key={item.id}>
+                        Prod #{item.product_id} (x{item.quantity}) - ${item.price_at_purchase}
+                      </li>
+                    ))}
+                  </ul>
+                </td>
+                <td>${order.total_price.toFixed(2)}</td>
+                <td>
+                  <span className={`status-badge ${order.status.toLowerCase()}`}>
+                    {order.status}
+                  </span>
+                </td>
+                <td>
+                  {order.status === "Pending" && (
+                    <button onClick={() => updateOrderStatus(order.id, "Delivered")}>
+                      Mark Delivered
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <hr />
 
       {/* ---------------- USERS TABLE ---------------- */}
       <div className="section">
@@ -141,6 +218,15 @@ const AdminDashboard = () => {
           value={productForm.description}
           onChange={(e) => setProductForm({ ...productForm, description: e.target.value })}
         ></textarea>
+
+        <div className="file-input-group">
+          <label>Product Image:</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setProductForm({ ...productForm, imageFile: e.target.files[0] })}
+          />
+        </div>
 
         {editMode ? (
           <button className="edit-btn" onClick={updateProduct}>Update Product</button>

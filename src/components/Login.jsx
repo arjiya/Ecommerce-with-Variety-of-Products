@@ -94,20 +94,20 @@
 // };
 
 // export default Login;
-import React, { useState } from "react";
+import { useState } from "react";
+import { FaEnvelope, FaEye, FaEyeSlash, FaLock, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaLock, FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
 import "./Login.css";
 
 const Login = () => {
-  const [loginData, setLoginData] = useState({ username: "", password: "" });
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    if (!loginData.username || !loginData.password) {
-      setError("Please enter username and password");
+    if (!loginData.email || !loginData.password) {
+      setError("Please enter email and password");
       return;
     }
 
@@ -144,15 +144,16 @@ const Login = () => {
       <h2>Login</h2>
 
       <div className="input-group">
-        <FaUser />
+        <FaEnvelope /> {/* Use Envelope icon for Email */}
         <input
-          type="text"
-          placeholder="Username"
-          value={loginData.username}
-          onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
+          type="email"
+          placeholder="Email Address"
+          value={loginData.email}
+          autoComplete="username"
+          onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
         />
-        {loginData.username && (
-          <FaTimes className="clear-icon" onClick={() => handleClear("username")} />
+        {loginData.email && (
+          <FaTimes className="clear-icon" onClick={() => handleClear("email")} />
         )}
       </div>
 
@@ -162,6 +163,7 @@ const Login = () => {
           type={showPassword ? "text" : "password"}
           placeholder="Password"
           value={loginData.password}
+          autoComplete="current-password"
           onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
         />
         {loginData.password && (

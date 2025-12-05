@@ -14,6 +14,7 @@ import PaymentResponsePage from './components/PaymentResponsePage';
 import Dashboard from './components/Dashboard';
 import Payment from './components/Payment';
 import PaymentSuccess from './components/PaymentSuccess';
+
 import PaymentFailure from './components/PaymentFailure';
 import khaltiConfig from './components/khaltiConfig';
 import ReceiptPage from './components/ReceiptPage';
@@ -47,7 +48,7 @@ function App() {
          <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/AdminDashboard" element={<AdminDashboard/>} />
 
-        {/* <Route path="/PaymentResponsePage" element={<PaymentResponsePage/>} />   */}
+        <Route path="/PaymentResponsePage" element={<PaymentResponsePage/>} />  
       </Routes>
     </Router>
   );

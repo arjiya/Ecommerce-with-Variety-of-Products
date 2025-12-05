@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./Profile.css";
 
 function Profile() {
   const [user, setUser] = useState(null);
-  const [newUsername, setNewUsername] = useState("");
+  const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
 
@@ -11,53 +11,49 @@ function Profile() {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     setUser(storedUser);
     if (storedUser) {
-      setNewUsername(storedUser.username);
-      setNewPassword(storedUser.password);
+      // Logic from Login.jsx maps email to 'username' key in the user object
+      setNewEmail(storedUser.username);
+      setNewPassword("");
     }
   }, []);
 
-  const handleUpdate = () => {
-    if (!newUsername || !newPassword) {
-      setMessage("Username and password cannot be empty.");
+  const handleUpdate = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+
+    if (!newEmail || !newPassword) {
+      setMessage("Email and password cannot be empty.");
       return;
     }
 
-    const allUsers = JSON.parse(localStorage.getItem("users")) || [];
-    const userIndex = allUsers.findIndex(u => u.username === user.username);
+    try {
+      const response = await fetch("http://127.0.0.1:5000/api/user/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: user.id,
+          email: newEmail,
+          password: newPassword
+        })
+      });
 
-    if (userIndex === -1) {
-      setMessage("User not found.");
-      return;
+      const data = await response.json();
+
+      if (data.success) {
+        // Update local state to reflect new email (which is stored as username key)
+        const updatedUser = { ...user, username: newEmail };
+        localStorage.setItem("user", JSON.stringify(updatedUser)); // Persist
+        setUser(updatedUser);
+        setMessage("Profile updated successfully.");
+        // Do NOT clear password immediately so browser can capture it
+        // setNewPassword(""); 
+      } else {
+        setMessage(data.message || "Update failed");
+      }
+
+    } catch (err) {
+      setMessage("Server error.");
+      console.error(err);
     }
-
-    // Check for duplicate username
-    const isUsernameTaken = allUsers.some((u, index) =>
-      u.username === newUsername && index !== userIndex
-    );
-    if (isUsernameTaken) {
-      setMessage("Username already taken.");
-      return;
-    }
-
-    // Update user info
-    allUsers[userIndex].username = newUsername;
-    allUsers[userIndex].password = newPassword;
-    localStorage.setItem("users", JSON.stringify(allUsers));
-
-    const updatedUser = { ...user, username: newUsername, password: newPassword };
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-    setUser(updatedUser);
-
-    // Rename cart if username changed
-    if (user.username !== newUsername) {
-      const oldCartKey = `cart_${user.username}`;
-      const newCartKey = `cart_${newUsername}`;
-      const cart = JSON.parse(localStorage.getItem(oldCartKey)) || [];
-      localStorage.removeItem(oldCartKey);
-      localStorage.setItem(newCartKey, JSON.stringify(cart));
-    }
-
-    setMessage("Profile updated successfully.");
   };
 
   if (!user) {
@@ -67,23 +63,27 @@ function Profile() {
   return (
     <div className="profile-container">
       <h2>Update Profile</h2>
-      <div className="form-group">
-        <label>New Username:</label>
-        <input
-          type="text"
-          value={newUsername}
-          onChange={(e) => setNewUsername(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <label>New Password:</label>
-        <input
-          type="password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-      </div>
-      <button onClick={handleUpdate}>Update Profile</button>
+      <form onSubmit={handleUpdate}>
+        <div className="form-group">
+          <label>New Email:</label>
+          <input
+            type="email"
+            value={newEmail}
+            autoComplete="username"
+            onChange={(e) => setNewEmail(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label>New Password:</label>
+          <input
+            type="password"
+            value={newPassword}
+            autoComplete="new-password"
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+        </div>
+        <button type="submit">Update Profile</button>
+      </form>
       {message && <p className="message">{message}</p>}
     </div>
   );

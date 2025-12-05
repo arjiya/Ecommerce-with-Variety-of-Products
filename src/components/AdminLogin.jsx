@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { FaEye, FaEyeSlash, FaLock, FaTimes, FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { FaLock, FaUser, FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
 import "./Login.css"; // reuse the same styles
 
 const AdminLogin = () => {
