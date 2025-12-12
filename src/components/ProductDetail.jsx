@@ -1,10 +1,10 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LoginPopup from "./LoginPopup";
 import "./ProductDetail.css";
 
 
-// Reusable recommendation card
 function RecommendedCard({ item, navigate }) {
   if (!item) return null;
   return (
@@ -102,7 +102,6 @@ function ProductDetail() {
       if (data.success) {
         alert("Item added to cart!");
         setAvailableStock((prev) => prev - quantity);
-        // Force header update
         window.dispatchEvent(new Event("cartUpdated"));
       } else {
         alert(data.message);
@@ -144,6 +143,7 @@ function ProductDetail() {
         <div className="product-detail-info">
           <h1>{product.title}</h1>
           <p className="description">{product.description}</p>
+
           <p>
             <strong>Price:</strong> ${product.price}
           </p>

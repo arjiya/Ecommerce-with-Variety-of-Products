@@ -14,7 +14,6 @@ const AdminDashboard = () => {
 
   const [orders, setOrders] = useState([]);
 
-  // ---------------- LOAD USERS ----------------
   const loadUsers = () => {
     fetch("http://127.0.0.1:5000/api/users")
       .then(res => res.json())
@@ -22,7 +21,6 @@ const AdminDashboard = () => {
       .catch(err => console.error("Error loading users:", err));
   };
 
-  // ---------------- LOAD PRODUCTS ----------------
   const loadProducts = () => {
     fetch("http://127.0.0.1:5000/api/products")
       .then(res => res.json())
@@ -30,7 +28,7 @@ const AdminDashboard = () => {
       .catch(err => console.error("Error loading products:", err));
   };
 
-  // ---------------- LOAD ORDERS ----------------
+
   const loadOrders = () => {
     fetch("http://127.0.0.1:5000/api/admin/orders")
       .then(res => res.json())
@@ -44,7 +42,6 @@ const AdminDashboard = () => {
     loadOrders();
   }, []);
 
-  // ---------------- ADD PRODUCT ----------------
   const addProduct = async () => {
     if (!productForm.title || !productForm.price) {
       alert("Title and Price are required");
@@ -61,7 +58,7 @@ const AdminDashboard = () => {
 
     await fetch("http://127.0.0.1:5000/api/products/add", {
       method: "POST",
-      body: formData, // Send as FormData (no Content-Type header needed, browser sets it)
+      body: formData, 
     });
 
     alert("Product Added");
@@ -69,7 +66,7 @@ const AdminDashboard = () => {
     loadProducts();
   };
 
-  // ---------------- DELETE PRODUCT ----------------
+
   const deleteProduct = async (id) => {
     await fetch(`http://127.0.0.1:5000/api/products/delete/${id}`, {
       method: "DELETE",
@@ -79,7 +76,7 @@ const AdminDashboard = () => {
     loadProducts();
   };
 
-  // ---------------- EDIT PRODUCT ----------------
+
   const editProduct = (p) => {
     setEditMode(true);
     setProductForm({
@@ -90,7 +87,7 @@ const AdminDashboard = () => {
     });
   };
 
-  // ---------------- UPDATE PRODUCT ----------------
+ 
   const updateProduct = async () => {
     if (!productForm.title || !productForm.price) {
       alert("Title and Price are required");
@@ -109,7 +106,6 @@ const AdminDashboard = () => {
     loadProducts();
   };
 
-  // ---------------- UPDATE ORDER STATUS ----------------
   const updateOrderStatus = async (orderId, newStatus) => {
     await fetch(`http://127.0.0.1:5000/api/admin/orders/${orderId}/status`, {
       method: "PUT",
@@ -123,7 +119,7 @@ const AdminDashboard = () => {
     <div className="admin-container">
       <h1 className="admin-title">ADMIN DASHBOARD</h1>
 
-      {/* ---------------- ORDERS TABLE ---------------- */}
+      {/* ---------------- ORDERS TABLE ----------------
       <div className="section">
         <h2>User Orders</h2>
         <table className="table">
@@ -170,7 +166,7 @@ const AdminDashboard = () => {
         </table>
       </div>
 
-      <hr />
+      <hr /> */}
 
       {/* ---------------- USERS TABLE ---------------- */}
       <div className="section">
@@ -195,7 +191,6 @@ const AdminDashboard = () => {
 
       <hr />
 
-      {/* ---------------- PRODUCT FORM ---------------- */}
       <div className="section">
         <h2>{editMode ? "Edit Product" : "Add Product"}</h2>
 
@@ -237,7 +232,7 @@ const AdminDashboard = () => {
 
       <hr />
 
-      {/* ---------------- PRODUCTS TABLE ---------------- */}
+      
       <div className="section">
         <h2>Products List</h2>
         <table className="table">

@@ -23,8 +23,7 @@ from database import (
 app = Flask(__name__)
 CORS(app)
 
-# ---------------- DATABASE SETUP ----------------
-create_users_table()
+#  DATABASE SETUP 
 create_admins_table()
 create_cart_table()
 create_orders_table()
@@ -33,7 +32,7 @@ create_payments_table()
 # Create default admin once
 add_admin("admin", "admin123")
 
-# ---------------- FILE PATHS ----------------
+# FILE PATHS 
 CSV_FILE = os.path.join(os.path.dirname(__file__), "fakestore_products.csv")
 PRODUCTS_FILE = os.path.join("Files", "products_df.pkl")
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
@@ -41,7 +40,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs("Files", exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# ---------------- PRODUCTS ----------------
+#  PRODUCTS 
 def load_products():
     if os.path.exists(PRODUCTS_FILE):
         return pd.read_pickle(PRODUCTS_FILE).to_dict(orient='records')
@@ -62,12 +61,12 @@ def load_products():
         print("CSV Load Error:", e)
         return []
 
-# ---------------- STATIC FILES ----------------
+#  STATIC FILES 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-# ---------------- USER AUTH ----------------
+#  USER AUTH 
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -110,7 +109,7 @@ def update_user():
         return jsonify({"success": True, "message": "Profile updated successfully"})
     return jsonify({"success": False, "message": "Email already in use"}), 400
 
-# ---------------- ADMIN AUTH ----------------
+#  ADMIN AUTH 
 @app.route('/api/admin/login', methods=['POST'])
 def admin_login():
     data = request.get_json()
@@ -129,7 +128,7 @@ def users_list():
 def admins_list():
     return jsonify(get_all_admins())
 
-# ---------------- PRODUCTS CRUD ----------------
+#  PRODUCTS CRUD 
 @app.route('/api/products', methods=['GET'])
 def get_products():
     return jsonify(load_products())
@@ -190,7 +189,7 @@ def update_product(product_id):
     pd.DataFrame(products).to_pickle(PRODUCTS_FILE)
     return jsonify({"success": True, "message": "Product updated"})
 
-# ---------------- RECOMMENDATIONS ----------------
+#  RECOMMENDATIONS 
 @app.route('/api/recommend/<int:product_id>', methods=['GET'])
 def recommend(product_id):
     products = load_products()
@@ -208,7 +207,7 @@ def recommend(product_id):
     return jsonify({"you_may_like": recommended.to_dict(orient="records"),
                     "popular": popular.to_dict(orient="records")})
 
-# ---------------- SEARCH ----------------
+# SEARCH
 @app.route('/api/search', methods=['GET'])
 def search_products():
     query = request.args.get("q", "").strip().lower()
@@ -226,7 +225,7 @@ def search_products():
     results = df_filtered.iloc[top_indices].to_dict(orient='records')
     return jsonify(results)
 
-# ---------------- CART ----------------
+# CART 
 @app.route('/api/cart/add', methods=['POST'])
 def add_cart_item():
     data = request.get_json()
@@ -262,7 +261,7 @@ def clear_user_cart(user_id):
     clear_cart(user_id)
     return jsonify({"success": True, "message": "Cart cleared"})
 
-# ---------------- PAYMENTS ----------------
+# PAYMENTS 
 @app.route('/api/payments', methods=['POST'])
 def save_payment():
     """
@@ -286,7 +285,7 @@ def save_payment():
         return jsonify({"success": False, "message": "Failed to save payment"}), 500
 
 
-# ---------------- PLACE ORDER WITH PAYMENT ----------------
+#  PLACE ORDER WITH PAYMENT 
 @app.route('/api/orders/place_with_payment', methods=['POST'])
 def place_order_with_payment():
     """
@@ -310,7 +309,7 @@ def place_order_with_payment():
     return jsonify({"success": False, "message": "Failed to place order"}), 500
 
 
-# ---------------- GET ALL ORDERS (ADMIN) ----------------
+#  GET ALL ORDERS (ADMIN) 
 @app.route('/api/admin/orders', methods=['GET'])
 def get_admin_orders():
     """
@@ -328,7 +327,7 @@ def get_admin_orders():
     return jsonify(orders)
 
 
-# ---------------- GET USER ORDERS ----------------
+#  GET USER ORDERS 
 @app.route('/api/orders/<int:user_id>', methods=['GET'])
 def get_user_order_history(user_id):
     """
